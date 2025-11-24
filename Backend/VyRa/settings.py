@@ -31,7 +31,8 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 # Allowed hosts - set via environment variable in production
 # Example: ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
+# For Render deployments, include: vyraverse.onrender.com
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,vyraverse.onrender.com', cast=Csv())
 
 
 # Application definition
@@ -82,25 +83,33 @@ WSGI_APPLICATION = 'VyRa.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-# NOTE: SQLite is fine for development but should be migrated to PostgreSQL/MySQL for production
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# Use PostgreSQL in production (Render provides DB_* env vars), SQLite for local development
+DB_NAME = config('DB_NAME', default='')
+DB_USER = config('DB_USER', default='')
+DB_PASSWORD = config('DB_PASSWORD', default='')
+DB_HOST = config('DB_HOST', default='')
+DB_PORT = config('DB_PORT', default='5432')
 
-# Production database configuration (uncomment and configure for production)
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': config('DB_NAME', default=''),
-#         'USER': config('DB_USER', default=''),
-#         'PASSWORD': config('DB_PASSWORD', default=''),
-#         'HOST': config('DB_HOST', default='localhost'),
-#         'PORT': config('DB_PORT', default='5432'),
-#     }
-# }
+if DB_NAME and DB_USER and DB_PASSWORD:
+    # Production: Use PostgreSQL
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': DB_NAME,
+            'USER': DB_USER,
+            'PASSWORD': DB_PASSWORD,
+            'HOST': DB_HOST if DB_HOST else 'localhost',
+            'PORT': DB_PORT,
+        }
+    }
+else:
+    # Development: Use SQLite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
