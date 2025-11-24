@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: vyraverse-api
+    env: python
+    buildCommand: "pip install -r Backend/requirements.txt && cd Backend && python manage.py migrate"
+    startCommand: "cd Backend && gunicorn VyRa.wsgi:application --bind 0.0.0.0:$PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        value: .onrender.com
