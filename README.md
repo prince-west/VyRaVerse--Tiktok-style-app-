@@ -2,7 +2,15 @@
 
 A comprehensive social media platform combining TikTok-style video sharing, Instagram-like social features, and Snapchat-inspired stories. Includes gamification with VyRa Points, an integrated marketplace, and video battle competitions.
 
-🌐 **Live Demo:** [DEPLOYMENT URL - Add after deploying]
+## 🚀 Live Demo
+
+*Backend API:* https://vyraverse.onrender.com  
+
+*Demo Video:* https://youtu.be/Y_xynHufUWY?si=92ay_o8tTk3gwDxc  
+
+📱 *Note:* Mobile-first application built with Flutter. Full demo available in video above.
+
+> ⚠ Backend hosted on free tier - may take 30 seconds to wake from sleep on first request.
 
 ![VyRaVerse Feed](screenshots/feed.jpg)
 
